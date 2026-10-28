@@ -60,18 +60,15 @@ def __train(weight_init_std):
 weight_scale_list = np.logspace(0, -4, num=16)
 x = np.arange(max_epochs)
 
+plt.figure(figsize=(12, 10))
 for i, w in enumerate(weight_scale_list):
     print( "============== " + str(i+1) + "/16" + " ==============")
     train_acc_list, bn_train_acc_list = __train(w)
-    
+
     plt.subplot(4,4,i+1)
-    plt.title("W:" + str(w))
-    if i == 15:
-        plt.plot(x, bn_train_acc_list, label='Batch Normalization', markevery=2)
-        plt.plot(x, train_acc_list, linestyle = "--", label='Normal(without BatchNorm)', markevery=2)
-    else:
-        plt.plot(x, bn_train_acc_list, markevery=2)
-        plt.plot(x, train_acc_list, linestyle="--", markevery=2)
+    plt.title("W:%.1e" % w)
+    plt.plot(x, bn_train_acc_list, label='Batch Normalization', markevery=2)
+    plt.plot(x, train_acc_list, linestyle="--", label='Normal(without BatchNorm)', markevery=2)
 
     plt.ylim(0, 1.0)
     if i % 4:
@@ -82,6 +79,7 @@ for i, w in enumerate(weight_scale_list):
         plt.xticks([])
     else:
         plt.xlabel("epochs")
-    plt.legend(loc='lower right')
-    
+
+plt.figlegend(*plt.gca().get_legend_handles_labels(), loc='lower center', ncol=2)
+plt.tight_layout(rect=(0, 0.05, 1, 1))
 plt.show()
